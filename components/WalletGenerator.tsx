@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import nacl from "tweetnacl";
-import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from "bip39";
+import { generateMnemonic, mnemonicToSeedSync } from "bip39";
 import { derivePath } from "ed25519-hd-key";
 import { Keypair } from "@solana/web3.js";
 import { motion } from "motion/react";
@@ -145,12 +145,13 @@ const WalletGenerator = () => {
       };
     } catch (error) {
       toast.error("Failed to generate wallet. Please try again.");
+      console.log(error)
       return null;
     }
   };
 
   const handleGenerateWallet = () => {
-    let mnemonic = generateMnemonic();
+    const mnemonic = generateMnemonic();
     
 
     const words = mnemonic.split(" ");
@@ -405,7 +406,7 @@ const WalletGenerator = () => {
               gridView ? "md:grid-cols-2 lg:grid-cols-3" : ""
             }`}
           >
-            {wallets.map((wallet: any, index: number) => (
+            {wallets.map((wallet, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: -20 }}
