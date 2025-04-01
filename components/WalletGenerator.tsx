@@ -6,7 +6,6 @@ import nacl from "tweetnacl";
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from "bip39";
 import { derivePath } from "ed25519-hd-key";
 import { Keypair } from "@solana/web3.js";
-import { Input } from "./ui/input";
 import { motion } from "motion/react";
 import bs58 from "bs58";
 import { ethers } from "ethers";
@@ -46,7 +45,6 @@ const WalletGenerator = () => {
   const [pathTypes, setPathTypes] = useState<string[]>([]);
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [showMnemonic, setShowMnemonic] = useState<boolean>(false);
-  const [mnemonicInput, setMnemonicInput] = useState<string>("");
   const [visiblePrivateKeys, setVisiblePrivateKeys] = useState<boolean[]>([]);
   const [visiblePhrases, setVisiblePhrases] = useState<boolean[]>([]);
   const [gridView, setGridView] = useState<boolean>(false);
@@ -107,12 +105,6 @@ const WalletGenerator = () => {
     );
   };
 
-  const togglePhraseVisibility = (index: number) => {
-    setVisiblePhrases(
-      visiblePhrases.map((visible, i) => (i === index ? !visible : visible))
-    );
-  };
-
   const generateWalletFromMnemonic = (
     pathType: string,
     mnemonic: string,
@@ -158,16 +150,8 @@ const WalletGenerator = () => {
   };
 
   const handleGenerateWallet = () => {
-    let mnemonic = mnemonicInput.trim();
-
-    if (mnemonic) {
-      if (!validateMnemonic(mnemonic)) {
-        toast.error("Invalid recovery phrase. Please try again.");
-        return;
-      }
-    } else {
-      mnemonic = generateMnemonic();
-    }
+    let mnemonic = generateMnemonic();
+    
 
     const words = mnemonic.split(" ");
     setMnemonicWords(words);
